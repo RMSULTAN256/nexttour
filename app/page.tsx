@@ -1,65 +1,242 @@
+"use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Car, Banknote, UserCheck, Users, Fuel, Calendar, Settings, ChevronRight, MapPin, Clock } from "lucide-react";
+import tourPackages from "../data/paket.json";
+import carsData from "../data/car.json";
 
 export default function Home() {
+  const image = [
+    "/header2.png",
+    "/header3.jpg",
+    "/header4.png",
+    "/header5.png",
+    "/header6.png"
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval= setInterval(() => {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === image.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [image.length]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <section className="relative w-full h-[60vh] flex flex-col justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div
+            className="flex h-full w-full transition-transform duration-1000 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {image.map((src, index) => (
+              <div
+                key={index}
+                className="h-full w-full shrink-0 bg-cover bg-center"
+                style={{ backgroundImage: `url('${src}')` }}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80 z-10"></div>
+
+        <div className="relative z-20 max-w-5xl mx-auto px-4 w-full">
+          {/* Judul: text-4xl di HP, membesar jadi text-6xl di PC */}
+          <h1 className="font-montserrat text-4xl md:text-6xl font-extrabold text-white text-center drop-shadow-xl tracking-tight leading-tight md:leading-snug">
+            <span className="text-orange-500 drop-shadow-md">Happy Tour</span> 
+            {/* <br> ini HANYA muncul di HP, dan akan menghilang di PC */}
+            <br className="block md:hidden" /> 
+            & Rental Mobil
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          
+          {/* Paragraf: text-base di HP (lebih kecil), membesar jadi text-lg di PC */}
+          <p className="text-gray-100 text-center mt-4 md:mt-5 text-base md:text-lg max-w-2xl mx-auto drop-shadow-md font-light leading-relaxed">
+            Jelajahi Destinasi Tanpa Beban. Dari sewa mobil fleksibel sampai paket travel lengkap, kami siapkan semuanya.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="w-full py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 text-center md:text-left">
+          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Tentang Kami
+          </h2>
+          <p className="text-gray-600 leading-relaxed mb-4 text-lg">
+            Happy Tour & Rental Mobil adalah penyedia layanan transportasi dan perjalanan terpercaya yang berdedikasi untuk memberikan pengalaman berkendara yang aman, nyaman, dan tak 
+            terlupakan. Kami hadir untuk menjawab segala kebutuhan mobilitas Anda, baik untuk liburan keluarga, perjalanan bisnis, maupun petualangan seru bersama teman.
+          </p>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Kami menawarkan berbagai pilihan armada yang selalu terawat dan siap disewa secara harian maupun mingguan. Selain itu, kami juga menyediakan paket travel komprehensif yang 
+            dirancang khusus dengan harga kompetitif. Dengan pelayanan profesional dan fleksibel, kami berkomitmen menjadi mitra perjalanan terbaik Anda. Nikmati perjalanan tanpa repot, 
+            karena kepuasan Anda adalah prioritas utama kami.
+          </p>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="w-full py-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col items-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
+            Keunggulan Kami
+          </h2>
+          
+          {/* Perubahan utama ada di baris ini: grid-cols-1 md:grid-cols-3 gap-6 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-6">
+            
+            {/* Kotak 1 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
+                <Car size={32} strokeWidth={1.5} />
+              </div> 
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Armada Terawat</h3>
+              <p className="text-gray-600">
+                Semua mobil kami selalu diservis rutin dan dalam kondisi prima untuk kenyamanan Anda.
+              </p>
+            </div>
+
+            {/* Kotak 2 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
+                <Banknote size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Harga Kompetitif</h3>
+              <p className="text-gray-600">
+                Kami menawarkan paket sewa dan travel dengan harga yang jujur tanpa biaya tersembunyi.
+              </p>
+            </div>
+
+            {/* Kotak 3 */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
+                <UserCheck size={32} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Sopir Berpengalaman</h3>
+              <p className="text-gray-600">
+                Perjalanan Anda akan didampingi oleh sopir yang terlatih, ramah, dan sangat memahami rute jalan untuk kenyamanan maksimal.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col items-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-4">
+            Pilihan Armada Kami
+          </h2>
+          <p className="text-gray-500 text-center mb-12 max-w-2xl">
+            Berbagai pilihan mobil yang selalu terawat dan siap menemani perjalananmu.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            {carsData.map((car) => (
+              <div 
+                key={car.id} 
+                className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+              >
+                <div className="relative h-48 w-full bg-gray-100">
+                  <Image 
+                    src={car.image} 
+                    alt={car.name} 
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm z-10">
+                    {car.type}
+                  </span>
+                </div>
+
+                <div className="p-6 flex flex-col grow">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">{car.name}</h3>
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-6">
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <Users size={16} className="mr-2 text-orange-500" />
+                      {car.seats} Kursi
+                    </div>
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <Settings size={16} className="mr-2 text-orange-500" />
+                      {car.transmission}
+                    </div>
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <Fuel size={16} className="mr-2 text-orange-500" />
+                      {car.fuel}
+                    </div>
+                    <div className="flex items-center text-gray-600 text-sm">
+                      <Calendar size={16} className="mr-2 text-orange-500" />
+                      Tahun {car.year}
+                    </div>
+                  </div>
+
+                  <div className="mt-auto border-t border-gray-100 pt-4 flex items-center justify-between">
+                    <div>
+                      <span className="text-xs text-gray-500 block">Mulai dari</span>
+                      <span className="text-lg font-bold text-orange-600 flex flex-col">
+                        <span>Rp{car.price.toLocaleString("id-ID")}<span className="text-sm font-normal text-gray-500">/hari</span></span>
+                        
+                        {car.isAllIn && (
+                          <span className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-sm w-max mt-1 uppercase tracking-wide border border-green-100">
+                            ✓ All-In Package
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                    <button className="bg-orange-600 hover:bg-orange-700 text-white p-2 rounded-lg transition-colors flex items-center justify-center">
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full py-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col items-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-4">
+            Jenis Paket Tour
+          </h2>
+          <p className="text-gray-500 text-center mb-12 max-w-2xl">
+            Pilih destinasi impianmu. Kami siapkan itinerary terbaik, transportasi nyaman, dan pengalaman yang tak terlupakan.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            {tourPackages.map((tour) => (
+              <div 
+                key={tour.id} 
+                className="group relative h-[400px] w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
+              >
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: `url('${tour.image}')` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                <div className="absolute bottom-0 left-0 w-full p-6 flex flex-col z-10">
+                  <div className="flex items-center gap-4 mb-2">
+                    <span className="flex items-center text-orange-400 text-sm font-semibold">
+                      <Clock size={14} className="mr-1" /> {tour.duration}
+                    </span>
+                    <span className="flex items-center text-gray-300 text-sm">
+                      <MapPin size={14} className="mr-1" /> {tour.location}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
+                    {tour.name}
+                  </h3>
+                  <p className="text-gray-300 text-sm line-clamp-2">
+                    {tour.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

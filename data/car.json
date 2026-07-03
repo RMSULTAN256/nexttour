@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "name": "New Toyota Agya",
+    "type": "City Car",
+    "image": "/car/agya.png",
+    "seats": 4,
+    "transmission": "Matic",
+    "fuel": "Bensin",
+    "year": 2023,
+    "price": 600000,
+    "isAllIn": true
+  },
+  {
+    "id": 2,
+    "name": "New Daihatsu Ayla",
+    "type": "City Car",
+    "image": "/car/ayla.png",
+    "seats": 4,
+    "transmission": "Matic",
+    "fuel": "Bensin",
+    "year": 2023,
+    "price": 600000,
+    "isAllIn": true
+  },
+  {
+    "id": 3,
+    "name": "Toyota Avanza",
+    "type": "MPV",
+    "image": "/car/avanza.png",
+    "seats": 7,
+    "transmission": "Manual",
+    "fuel": "Bensin",
+    "year": 2022,
+    "price": 350000
+  },
+  {
+    "id": 4,
+    "name": "New Daihatsu Xenia",
+    "type": "MPV",
+    "image": "/car/xenia2.jpg",
+    "seats": 7,
+    "transmission": "Matic",
+    "fuel": "Bensin",
+    "year": 2023,
+    "price": 700000,
+    "isAllIn": true
+  },
+  {
+    "id": 5,
+    "name": "Toyota Hiace Commuter",
+    "type": "Minibus",
+    "image": "/car/hiace.jpg",
+    "seats": 13,
+    "transmission": "Manual",
+    "fuel": "Diesel",
+    "year": 2022,
+    "price": 1000000,
+    "isAllIn": true
+  },
+  {
+    "id": 6,
+    "name": "Bus Medium Pariwisata",
+    "type": "Medium Bus",
+    "image": "/car/bus35.jpg",
+    "seats": 35,
+    "transmission": "Manual",
+    "fuel": "Diesel",
+    "year": 2020,
+    "price": 1400000,
+    "isAllIn": true
+  },
+  {
+    "id": 7,
+    "name": "Big Bus Pariwisata",
+    "type": "Big Bus",
+    "image": "/car/bus50.jpg",
+    "seats": 50,
+    "transmission": "Manual",
+    "fuel": "Diesel",
+    "year": 2019,
+    "price": 1800000,
+    "isAllIn": true
+  }
+]
