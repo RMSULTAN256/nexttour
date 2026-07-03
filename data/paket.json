@@ -7,7 +7,7 @@
     "location": "Batam",
     "price": 400,
     "description": "Liburan singkat dan padat mencakup ikon Batam, wisata religi seperti Mesjid Tanjak, dan spot foto hits seperti Dino's Gate.",
-    "image": "welcometobatam.jpg",
+    "image": "welcometo.png",
     "itinerary": [
       {
         "day": "Hari 1",
@@ -64,7 +64,7 @@
     "Tiket lawatan Pantai Pink",
     "Air mineral 1 Btl/Day"
   ],
-    "image": "batam city skyline",
+    "image": "/pesona.jfif",
   "itinerary": [
     {
       "day": "Hari 1",
@@ -123,39 +123,90 @@
     "price": 950,
     "description": "Perjalanan premium lintas pulau! Nikmati eksotisme gurun pasir Bintan, Treasure Bay, dan seluruh keindahan Batam dalam satu perjalanan.",
     "image": "/batambintan.jpg",
+    "includes": [
+      "Tiket Ferry Batam to Johor",
+      "Tiket Ferry Johor to Batam",
+      "Hotel 3 Malam",
+      "Transport 4 Hari",
+      "Breakfast 3x",
+      "Lunch 3x",
+      "Dinner 3x",
+      "Tiket penyeberangan & wisata Bintan",
+      "Air mineral 1 Btl/Day"
+    ],
+    "highlights": [
+      "Treasure Bay Bintan",
+      "Gurun Pasir Bintan",
+      "Jembatan Barelang",
+      "Masjid Sultan Mahmud Riwayat Syah",
+      "Museum Raja Ali Haji"
+    ],
     "itinerary": [
       {
         "day": "Hari 1",
-        "title": "Tiba di Batam & City Tour",
+        "title": "Kedatangan & City Tour Batam",
         "activities": [
-          { "name": "Welcome to Batam", "image": "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Mesjid Raja Engku Hamidah", "image": "https://images.unsplash.com/photo-1568992687947-868a62a9f521?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Museum Batam", "image": "https://images.unsplash.com/photo-1590050752112-9c8446b0a04e?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Oleh-oleh khas Batam", "image": "https://images.unsplash.com/photo-1601000547012-70b9df638202?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Mesjid Tanjak", "image": "" },
-          { "name": "lunch ", "image": "" },
-          { "name": "Dino's Gatel", "image": "" },
-          { "name": "The Ilussionts", "image": "" },
-          { "name": "70 Fahrenheit ", "image": "" },
-          { "name": "GFO", "image": "" },
-          { "name": "Pasir Pink/Bluefire", "image": "" },
-          { "name": "Dinner", "image": "" },
-          { "name": "Check in", "image": "" },
-          { "name": "Free and easy", "image": "" }
+          { "name": "Jeti", "keyword": "harbor" },
+          { "name": "Museum Raja Ali Haji", "keyword": "museum" },
+          { "name": "Mesjid Raja Hamidah", "keyword": "grand mosque" },
+          { "name": "Welcome to Batam", "keyword": "landmark" },
+          { "name": "Annisa Oleh oleh khas Batam", "keyword": "souvenir" },
+          { "name": "Lunch", "keyword": "lunch" },
+          { "name": "Kilang Lapis", "keyword": "layer cake" },
+          { "name": "Mesjid Tanjak", "keyword": "beautiful mosque" },
+          { "name": "Pasar Pujabahari (Keripik, ikan bilis, dll)", "keyword": "traditional market" },
+          { "name": "Check in Hotel", "keyword": "hotel room" },
+          { "name": "Dinner", "keyword": "dinner" }
         ]
       },
       {
         "day": "Hari 2",
-        "title": "Belanja & Jembatan Barelang",
+        "title": "One Day Tour Bintan",
         "activities": [
-          { "name": "Sarapan di Hotel", "image": "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Pasar beli keripik kerupuk ikan bilis dll", "image": "https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Puncak Beliung" , "image": "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Mesjid Sultan Mahmud Riwayat Syah", "image": "https://images.unsplash.com/photo-1554256273-64016b2512f4?q=80&w=400&auto=format&fit=crop" },
-          { "name": "Jembatan Barelang ", "image": "" },
-          { "name": "Lunch", "image": "" },
-          { "name": "Nagoya Hill/DC Mall", "image": "" },
-          { "name": "Kembali ke Jetty", "image": "" }
+          { "name": "Sarapan di Hotel", "keyword": "breakfast" },
+          { "name": "Menuju Pelabuhan Telaga Punggur", "keyword": "ferry" },
+          { "name": "Gurun Pasir", "keyword": "sand dunes" },
+          { "name": "Telaga Biru", "keyword": "blue lake" },
+          { "name": "Lake Lagoi", "keyword": "lake" },
+          { "name": "Lagoi Bay", "keyword": "bay beach" },
+          { "name": "Treasure Bay", "keyword": "swimming pool resort" },
+          { "name": "Patung Penyu", "keyword": "turtle statue" },
+          { "name": "Kembali ke Pelabuhan Tanjung Uban", "keyword": "port" },
+          { "name": "Dinner", "keyword": "dinner" },
+          { "name": "Hotel", "keyword": "hotel" }
+        ]
+      },
+      {
+        "day": "Hari 3",
+        "title": "Eksplorasi Wisata Batam & Barelang",
+        "activities": [
+          { "name": "Sarapan di Hotel", "keyword": "breakfast" },
+          { "name": "Puncak Beliung", "keyword": "nature park" },
+          { "name": "Saung Budaya Batam", "keyword": "culture" },
+          { "name": "Mesjid Sultan Mahmud Riwayat Syah", "keyword": "grand mosque" },
+          { "name": "Jembatan Barelang", "keyword": "bridge" },
+          { "name": "Lunch", "keyword": "lunch" },
+          { "name": "Mesjid Cheng Ho", "keyword": "chinese mosque" },
+          { "name": "Dino's Gate", "keyword": "dinosaur park" },
+          { "name": "The Ilussions", "keyword": "3d art museum" },
+          { "name": "70 Fahrenheit", "keyword": "spa massage" },
+          { "name": "Pantai Pasir Pink", "keyword": "pink sand beach" },
+          { "name": "Golden Factory", "keyword": "factory" },
+          { "name": "Mall", "keyword": "shopping mall" },
+          { "name": "Dinner", "keyword": "dinner" }
+        ]
+      },
+      {
+        "day": "Hari 4",
+        "title": "Belanja & Sayonara",
+        "activities": [
+          { "name": "Sarapan di Hotel", "keyword": "breakfast" },
+          { "name": "Mesjid Jabal Arafah", "keyword": "mosque" },
+          { "name": "Batamia", "keyword": "shopping" },
+          { "name": "Italy Moda", "keyword": "fashion store" },
+          { "name": "Mall", "keyword": "shopping mall" },
+          { "name": "Pelabuhan untuk kembali ke Malaysia", "keyword": "ferry port" },
+          { "name": "Finish", "keyword": "travel end" }
         ]
       }
     ]

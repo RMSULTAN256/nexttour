@@ -84,7 +84,7 @@ export default function PaketTour() {
                         <div className="flex justify-between items-center mt-4 border-t border-white/20 pt-4">
                             <div>
                             <p className="text-white text-xs font-medium opacity-80">Mulai dari</p>
-                            <p className="text-orange-400 font-bold text-xl">{tour.price}</p>
+                            <p className="text-orange-400 font-bold text-xl">{tour.price} RM/Pax</p>
                             </div>
                             
                             <Link 

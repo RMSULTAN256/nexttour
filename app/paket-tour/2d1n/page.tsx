@@ -21,7 +21,7 @@ export default function DetailPaketTour() {
   const [pax, setPax] = useState(1);
 
   // Ambil data (Nantinya p.id ini bisa dinamis dari URL params)
-  const tourData = tourPackages.find((p: any) => p.id === 1) || tourPackages[0];
+  const tourData = tourPackages.find((p) => p.id === 1) || tourPackages[0];
 
   if (!tourData) {
     return (
