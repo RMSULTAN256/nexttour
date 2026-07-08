@@ -4,7 +4,6 @@ import Image from "next/image";
 import { MapPin, Clock, Users, Minus, Plus, Star } from "lucide-react";
 import tourPackages from "../../../data/paket.json";
 
-// 1. Definisikan Interface agar TypeScript tidak protes
 interface ActivityItem {
   name: string;
   keyword?: string;
@@ -19,10 +18,10 @@ interface ItineraryDay {
 
 export default function DetailPaketTour() {
   const [pax, setPax] = useState(1);
+  
+  const tourData = tourPackages.find((p) => p.id === 1);
 
-  // Ambil data (Nantinya p.id ini bisa dinamis dari URL params)
-  const tourData = tourPackages.find((p) => p.id === 1) || tourPackages[0];
-
+  // Jika ID di URL tidak ada di paket.json, tampilkan error
   if (!tourData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -31,7 +30,7 @@ export default function DetailPaketTour() {
     );
   }
 
-  // 2. FUNGSI HELPER: Harga Anti-Error
+  // FUNGSI HELPER: Harga Anti-Error
   const getNumericPrice = (priceVal: string | number) => {
     if (typeof priceVal === 'number') return priceVal;
     if (!priceVal) return 0;
@@ -42,7 +41,7 @@ export default function DetailPaketTour() {
   const numericPrice = getNumericPrice(tourData.price);
   const totalPrice = pax * numericPrice;
 
-  // 3. FUNGSI HELPER: Gambar Dinamis
+  // FUNGSI HELPER: Gambar Dinamis
   const getImageUrl = (source: string, width: number, height: number, isKeyword = false) => {
     if (!source) return `https://placehold.co/${width}x${height}/orange/white?text=No+Image`;
     if (source.startsWith("http") || source.startsWith("/")) return source;
@@ -50,8 +49,8 @@ export default function DetailPaketTour() {
     return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
   };
 
-  // 4. LOGIKA TOMBOL WHATSAPP
-  const waNumber = "6281234567890"; // Jangan lupa ganti dengan nomor adminmu!
+  // LOGIKA TOMBOL WHATSAPP
+  const waNumber = "6282283225920";
   const waMessage = encodeURIComponent(`Halo, saya ingin memesan paket tour:\n\n*${tourData.name}*\nJumlah Peserta: ${pax} Orang\nTotal Estimasi: RM ${totalPrice}\n\nMohon informasi ketersediaannya.`);
   const waLink = `https://wa.me/${waNumber}?text=${waMessage}`;
 
@@ -62,6 +61,7 @@ export default function DetailPaketTour() {
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
+          // Gambar hero sekarang akan dinamis mengikuti tourData.image dari ID yang diklik
           style={{ backgroundImage: `url('${getImageUrl(tourData.image || "1548013146-72479768bada", 1920, 1080)}')` }} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
@@ -125,7 +125,6 @@ export default function DetailPaketTour() {
                     
                     <div className="flex flex-col">
                       {dayData.activities?.map((rawItem, index) => {
-                        // Type-casting & Deteksi Otomatis untuk TypeScript
                         const isString = typeof rawItem === 'string';
                         const item = isString ? { name: rawItem } as ActivityItem : rawItem as ActivityItem;
                         const keyword = isString ? rawItem : (item.keyword || item.name);

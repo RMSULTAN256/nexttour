@@ -54,6 +54,10 @@ export default function DetailPaketTour() {
     return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
   };
 
+  const waNumber = "6282283225920";
+  const waMessage = encodeURIComponent(`Halo, saya ingin memesan paket tour:\n\n*${tourData.name}*\nJumlah Peserta: ${pax} Orang\nTotal Estimasi: RM ${totalPrice}\n\nMohon informasi ketersediaannya.`);
+  const waLink = `https://wa.me/${waNumber}?text=${waMessage}`;
+
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       

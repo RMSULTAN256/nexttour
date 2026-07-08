@@ -44,7 +44,7 @@ export default function RootLayout({
         <footer className="w-full bg-blue-700 text-white py-8 mt-auto">
           {/* Inner container opsional agar teks footer sejajar dengan konten atas */}
           <div className="max-w-6xl mx-auto px-4 text-center md:text-left flex flex-col md:flex-row justify-between">
-            <p>&copy; 2026 Nama Website Kamu. Hak Cipta Dilindungi.</p>
+            <p>&copy; 2026 HappyTourRentCar.</p>
             <div className="space-x-4 mt-4 md:mt-0">
               <a href="#" className="hover:underline">Kebijakan Privasi</a>
               <a href="#" className="hover:underline">Kontak</a>
