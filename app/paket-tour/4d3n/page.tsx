@@ -61,7 +61,6 @@ export default function DetailPaketTour() {
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
-      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
@@ -87,20 +86,16 @@ export default function DetailPaketTour() {
         </div>
       </section>
 
-      {/* KONTEN UTAMA */}
       <section className="max-w-6xl mx-auto px-4 -mt-12 relative z-30 flex flex-col lg:flex-row gap-8">
         
-        {/* KOLOM KIRI: Detail & Itinerary */}
         <div className="flex-1 space-y-8">
           
-          {/* BOX TENTANG PAKET */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Tentang Paket</h2>
             <p className="text-gray-600 leading-relaxed mb-8 text-sm md:text-base text-justify whitespace-pre-line">
               {tourData.description}
             </p>
             
-            {/* Hanya tampil jika highlights ada dan tidak kosong */}
             {tourData.highlights && tourData.highlights.length > 0 && (
               <div className="flex flex-wrap gap-3">
                 {tourData.highlights.map((dest: string, index: number) => (
@@ -116,7 +111,6 @@ export default function DetailPaketTour() {
             )}
           </div>
 
-          {/* BOX FASILITAS (INCLUDE) */}
           {tourData.includes && tourData.includes.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -135,7 +129,6 @@ export default function DetailPaketTour() {
             </div>
           )}
 
-          {/* BOX ITINERARY */}
           {tourData.itinerary && tourData.itinerary.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -153,7 +146,6 @@ export default function DetailPaketTour() {
                       {dayData.activities?.map((item: ActivityItem | string, index: number) => {
                         const isString = typeof item === 'string';
 
-                        // Kita "paksa" TypeScript mengenali item sebagai ActivityItem
                         const objItem = item as ActivityItem; 
 
                         const placeName = isString ? item : objItem.name;
@@ -179,7 +171,6 @@ export default function DetailPaketTour() {
                               {placeName}
                             </span>
 
-                            {/* WIDGET POPUP GAMBAR DINAMIS */}
                             <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                               <div className="absolute inset-0 bg-black/10 z-10" />
                               <Image 
@@ -205,7 +196,6 @@ export default function DetailPaketTour() {
           )}
         </div>
 
-        {/* KOLOM KANAN: Kalkulator Harga (Sticky) */}
         <div className="w-full lg:w-[400px]">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 lg:sticky lg:top-24">
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pesan Paket Tour</h3>
@@ -241,7 +231,6 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
-            {/* Tombol Pesan via WhatsApp */}
             <a 
               href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo, saya tertarik dengan paket tour *${tourData.name}*.\n\nJumlah Peserta: ${pax} Pax\nTotal Harga: RM ${totalPrice}\n\nApakah paket ini masih tersedia?`)}`}
               target="_blank"

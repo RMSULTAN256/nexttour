@@ -44,15 +44,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80 z-10"></div>
 
         <div className="relative z-20 max-w-5xl mx-auto px-4 w-full">
-          {/* Judul: text-4xl di HP, membesar jadi text-6xl di PC */}
           <h1 className="font-montserrat text-4xl md:text-6xl font-extrabold text-white text-center drop-shadow-xl tracking-tight leading-tight md:leading-snug">
             <span className="text-orange-500 drop-shadow-md">Happy Tour</span> 
-            {/* <br> ini HANYA muncul di HP, dan akan menghilang di PC */}
             <br className="block md:hidden" /> 
             & Rental Mobil
           </h1>
           
-          {/* Paragraf: text-base di HP (lebih kecil), membesar jadi text-lg di PC */}
           <p className="text-gray-100 text-center mt-4 md:mt-5 text-base md:text-lg max-w-2xl mx-auto drop-shadow-md font-light leading-relaxed">
             Jelajahi Destinasi Tanpa Beban. Dari sewa mobil fleksibel sampai paket travel lengkap, kami siapkan semuanya.
           </p>
@@ -82,10 +79,8 @@ export default function Home() {
             Keunggulan Kami
           </h2>
           
-          {/* Perubahan utama ada di baris ini: grid-cols-1 md:grid-cols-3 gap-6 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-6">
             
-            {/* Kotak 1 */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
                 <Car size={32} strokeWidth={1.5} />
@@ -96,7 +91,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Kotak 2 */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
                 <Banknote size={32} strokeWidth={1.5} />
@@ -107,7 +101,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Kotak 3 */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
               <div className="mb-4 p-4 bg-orange-50 rounded-full text-orange-600">
                 <UserCheck size={32} strokeWidth={1.5} />

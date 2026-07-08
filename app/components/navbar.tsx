@@ -2,21 +2,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react"; // 1. Import ikon hamburger dan close
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const isBlurPage = pathname === "/";
   
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // 2. State untuk buka/tutup menu mobile
+  const [isOpen, setIsOpen] = useState(false);
 
-  // 3. Menutup menu mobile otomatis setiap kali pindah halaman
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Efek deteksi scroll
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -37,7 +35,6 @@ export default function Navbar() {
     { name: "Hubungi", href: "/hubungi" },
   ];
 
-  // LOGIKA BARU: Teks gelap jika di-scroll, BUKAN di beranda, ATAU menu mobile sedang terbuka
   const useDarkText = isScrolled || !isBlurPage || isOpen;
 
   return (
@@ -52,7 +49,6 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         
-        {/* LOGO */}
         <Link 
           href="/" 
           className={`text-lg font-bold transition-colors duration-300 ${
@@ -62,7 +58,6 @@ export default function Navbar() {
           TourTravelKu
         </Link>
 
-        {/* --- MENU DESKTOP (Sembunyi di HP, Animasi smooth saat aktif) --- */}
         <div className="hidden md:flex gap-2 font-inter">
           {navLink.map((link) => {
             const isActive = pathname === link.href;
@@ -74,8 +69,8 @@ export default function Navbar() {
                 className={`relative px-4 py-2 rounded-lg transition-all duration-500 ease-out text-sm font-medium hover:scale-105 active:scale-95 ${
                   isActive
                     ? useDarkText
-                      ? "bg-orange-50 text-orange-600 shadow-sm" // Warna aktif (oren) di background terang
-                      : "bg-white/20 text-white shadow-sm backdrop-blur-sm" // Warna aktif di background transparan
+                      ? "bg-orange-50 text-orange-600 shadow-sm"
+                      : "bg-white/20 text-white shadow-sm backdrop-blur-sm"
                     : useDarkText
                       ? "text-gray-500 hover:bg-gray-100 hover:text-gray-900" 
                       : "text-white/80 hover:bg-white/10 hover:text-white"
@@ -87,7 +82,6 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* --- TOMBOL HAMBURGER MENU (Hanya muncul di HP) --- */}
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className={`md:hidden p-1 rounded-md transition-colors duration-300 ${
@@ -98,7 +92,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* --- DROPDOWN MENU MOBILE --- */}
       <div 
         className={`md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 transition-all duration-300 origin-top overflow-hidden ${
           isOpen ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0 h-0"

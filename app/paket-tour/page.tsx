@@ -15,7 +15,6 @@ export default function PaketTour() {
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
-      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] flex flex-col justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center z-0" />
         <div className="absolute inset-0 bg-black/40 z-10" />
@@ -28,7 +27,6 @@ export default function PaketTour() {
         </div>
       </section>
 
-      {/* SEARCH WIDGET */}
       <section className="relative z-30 max-w-4xl mx-auto px-4 -mt-16 w-full">
         <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 border border-gray-100 flex gap-2">
           <div className="relative flex-grow">
@@ -44,23 +42,19 @@ export default function PaketTour() {
         </div>
       </section>
 
-      {/* TOUR GRID */}
       <section className="max-w-6xl mx-auto px-4 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredTours.map((tour) => (
             <div key={tour.id} className="group relative h-[420px] w-full rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100">
               
-              {/* IMAGE BG */}
               <div 
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
                 style={{ backgroundImage: `url('${tour.image}')` }} 
               />
               
-              {/* OVERLAY */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent pt-20">
-                    {/* Metadata (Durasi & Lokasi) */}
                     <div className="flex items-center gap-4 mb-3 text-sm text-gray-200">
                         <span className="flex items-center bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md">
                         <Clock size={14} className="mr-1 text-orange-400" /> {tour.duration}
@@ -70,17 +64,14 @@ export default function PaketTour() {
                         </span>
                     </div>
                     
-                    {/* Judul */}
                     <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-orange-400 transition-colors">
                         {tour.name}
                     </h3>
                     
-                    {/* Deskripsi */}
                     <p className="text-gray-300 text-sm mb-4 line-clamp-2 leading-relaxed">
                         {tour.description}
                     </p>
                     
-                    {/* FOOTER CARD (Harga & Tombol) */}
                         <div className="flex justify-between items-center mt-4 border-t border-white/20 pt-4">
                             <div>
                             <p className="text-white text-xs font-medium opacity-80">Mulai dari</p>

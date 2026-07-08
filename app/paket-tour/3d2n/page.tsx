@@ -64,7 +64,6 @@ export default function DetailPaketTour() {
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
-      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
@@ -90,20 +89,16 @@ export default function DetailPaketTour() {
         </div>
       </section>
 
-      {/* KONTEN UTAMA */}
       <section className="max-w-6xl mx-auto px-4 -mt-12 relative z-30 flex flex-col lg:flex-row gap-8">
         
-        {/* KOLOM KIRI: Detail & Itinerary */}
         <div className="flex-1 space-y-8">
           
-          {/* BOX TENTANG PAKET */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Tentang Paket</h2>
             <p className="text-gray-600 leading-relaxed mb-8 text-sm md:text-base text-justify whitespace-pre-line">
               {tourData.description}
             </p>
             
-            {/* Hanya tampil jika highlights ada dan tidak kosong */}
             {tourData.highlights && tourData.highlights.length > 0 && (
               <div className="flex flex-wrap gap-3">
                 {tourData.highlights.map((dest: string, index: number) => (
@@ -119,7 +114,6 @@ export default function DetailPaketTour() {
             )}
           </div>
 
-          {/* BOX FASILITAS (INCLUDE) */}
           {tourData.includes && tourData.includes.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -138,7 +132,6 @@ export default function DetailPaketTour() {
             </div>
           )}
 
-          {/* BOX ITINERARY */}
           {tourData.itinerary && tourData.itinerary.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -156,7 +149,6 @@ export default function DetailPaketTour() {
                       {dayData.activities?.map((item: ActivityItem | string, index: number) => {
                         const isString = typeof item === 'string';
 
-                        // Kita "paksa" TypeScript mengenali item sebagai ActivityItem
                         const objItem = item as ActivityItem; 
 
                         const placeName = isString ? item : objItem.name;
@@ -182,7 +174,6 @@ export default function DetailPaketTour() {
                               {placeName}
                             </span>
 
-                            {/* WIDGET POPUP GAMBAR DINAMIS */}
                             <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                               <div className="absolute inset-0 bg-black/10 z-10" />
                               <Image 
@@ -208,13 +199,11 @@ export default function DetailPaketTour() {
           )}
         </div>
 
-        {/* KOLOM KANAN: Kalkulator Harga (Sticky) */}
         <div className="w-full lg:w-[400px]">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 lg:sticky lg:top-24">
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pesan Paket Tour</h3>
             <p className="text-gray-500 text-sm mb-6">Hitung estimasi biaya perjalanan Anda.</p>
 
-            {/* STEPPER JUMLAH PESERTA */}
             <div className="bg-gray-50 p-4 rounded-2xl mb-4 border border-gray-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Users size={20} className="text-orange-500" />
@@ -237,14 +226,12 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
-            {/* NOTIFIKASI ERROR JIKA KURANG DARI 5 PAX */}
             {!isPaxValid && (
               <div className="mb-4 p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
                 ⚠️ Paket ini memerlukan minimal pesanan 5 peserta.
               </div>
             )}
 
-            {/* SELEKSI OPSI INCLUDE TAMBAHAN (+RM 100) */}
             <div className="mb-6">
               <h4 className="text-sm font-bold text-gray-700 mb-2">Opsi Tambahan:</h4>
               <label 
@@ -270,7 +257,6 @@ export default function DetailPaketTour() {
               </label>
             </div>
 
-            {/* DISPLAY TOTAL HARGA AKHIR */}
             <div className="flex justify-between items-end mb-6 pb-6 border-b border-gray-100">
               <span className="text-gray-500 font-medium">Total Harga</span>
               <div className="text-right">
@@ -279,7 +265,6 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
-            {/* TOMBOL WHATSAPP DENGAN LOGIKA VALIDASI */}
             <a 
               href={isPaxValid ? `https://wa.me/6281234567890?text=${encodeURIComponent(
                 `Halo, saya tertarik dengan paket tour *${tourData.name}*.\n\n` +

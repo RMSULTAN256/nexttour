@@ -21,7 +21,6 @@ export default function DetailPaketTour() {
   
   const tourData = tourPackages.find((p) => p.id === 1);
 
-  // Jika ID di URL tidak ada di paket.json, tampilkan error
   if (!tourData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -30,7 +29,6 @@ export default function DetailPaketTour() {
     );
   }
 
-  // FUNGSI HELPER: Harga Anti-Error
   const getNumericPrice = (priceVal: string | number) => {
     if (typeof priceVal === 'number') return priceVal;
     if (!priceVal) return 0;
@@ -41,7 +39,6 @@ export default function DetailPaketTour() {
   const numericPrice = getNumericPrice(tourData.price);
   const totalPrice = pax * numericPrice;
 
-  // FUNGSI HELPER: Gambar Dinamis
   const getImageUrl = (source: string, width: number, height: number, isKeyword = false) => {
     if (!source) return `https://placehold.co/${width}x${height}/orange/white?text=No+Image`;
     if (source.startsWith("http") || source.startsWith("/")) return source;
@@ -49,7 +46,6 @@ export default function DetailPaketTour() {
     return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
   };
 
-  // LOGIKA TOMBOL WHATSAPP
   const waNumber = "6282283225920";
   const waMessage = encodeURIComponent(`Halo, saya ingin memesan paket tour:\n\n*${tourData.name}*\nJumlah Peserta: ${pax} Orang\nTotal Estimasi: RM ${totalPrice}\n\nMohon informasi ketersediaannya.`);
   const waLink = `https://wa.me/${waNumber}?text=${waMessage}`;
@@ -57,11 +53,9 @@ export default function DetailPaketTour() {
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
-      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
-          // Gambar hero sekarang akan dinamis mengikuti tourData.image dari ID yang diklik
           style={{ backgroundImage: `url('${getImageUrl(tourData.image || "1548013146-72479768bada", 1920, 1080)}')` }} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
@@ -80,20 +74,16 @@ export default function DetailPaketTour() {
         </div>
       </section>
 
-      {/* KONTEN UTAMA */}
       <section className="max-w-6xl mx-auto px-4 -mt-12 relative z-30 flex flex-col lg:flex-row gap-8">
         
-        {/* KOLOM KIRI */}
         <div className="flex-1 space-y-8">
           
-          {/* BOX TENTANG PAKET */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Tentang Paket</h2>
             <p className="text-gray-600 leading-relaxed mb-8 text-sm md:text-base text-justify">
               {tourData.description}
             </p>
 
-            {/* Render Highlights Dinamis */}
             {tourData.highlights && tourData.highlights.length > 0 && (
               <div className="flex flex-wrap gap-3">
                 {tourData.highlights.map((dest: string, index: number) => (
@@ -109,7 +99,6 @@ export default function DetailPaketTour() {
             )}
           </div>
 
-          {/* BOX ITINERARY */}
           {tourData.itinerary && tourData.itinerary.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -147,7 +136,6 @@ export default function DetailPaketTour() {
                               {item.name}
                             </span>
 
-                            {/* POPUP GAMBAR DINAMIS */}
                             <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                               <div className="absolute inset-0 bg-black/10 z-10" />
                               <Image 
@@ -175,7 +163,6 @@ export default function DetailPaketTour() {
           )}
         </div>
 
-        {/* KOLOM KANAN: Kalkulator Harga & Booking */}
         <div className="w-full lg:w-[400px]">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 lg:sticky lg:top-24" suppressHydrationWarning>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pesan Paket Tour</h3>
