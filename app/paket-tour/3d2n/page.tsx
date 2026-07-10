@@ -1,16 +1,72 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { MapPin, Clock, Users, CheckCircle, Check, Minus, Plus, Star } from "lucide-react";
+import { MapPin, Clock, Users, Check, Minus, Plus, Star, Info } from "lucide-react";
 import tourPackages from "../../../data/paket.json";
 
 export default function DetailPaketTour() {
-  const [pax, setPax] = useState(1);
+  type OptionKey = 'batam_only' | 'batam_bintan';
+  
+  // 1. STATE & KONFIGURASI 2 PILIHAN PAKET
+  const [selectedOption, setSelectedOption] = useState<OptionKey>('batam_only');
+  const [pax, setPax] = useState(5); 
 
-  const [includeFerry, setIncludeFerry] = useState(false);
-  const [includeAddon, setIncludeAddon] = useState(false);
-  const basePrice = 650;
-  const addonPrice = 100;
+  // --- STATE UNTUK PETA DINAMIS ---
+  const [selectedPlace, setSelectedPlace] = useState("");
+
+  // Data Konfigurasi Super Detail (Sesuai List Terbaru)
+  const packageOptions = {
+    batam_only: {
+      price: 650,
+      minPax: 5,
+      title: "Pakej 3D2N Batam",
+      shortSub: "Min. 5 Pax • Eksplorasi Batam Saja",
+      includes: [
+        "Tiket Ferry Johor to Batam 2 Way",
+        "Hotel 3 Bintang 2 malam",
+        "Transport selama 3 Hari",
+        "Breakfast 2x, Lunch 2x, Dinner 2x",
+        "Tiket Lawatan Jembatan Barelang",
+        "Air Mineral 1 btl/day"
+      ],
+      excludes: []
+    },
+    batam_bintan: {
+      price: 750,
+      minPax: 5,
+      title: "Pakej 3D2N Batam dan Bintan",
+      shortSub: "Min. 5 Pax • Batam & Akses Bintan",
+      includes: [
+        "Tiket Ferry Johor to Batam 2 Way",
+        "Tiket Batam to Bintan 2 way",
+        "Hotel 3 Bintang 2 malam",
+        "Transport selama 3 Hari Batam dan Bintan",
+        "Tiket Lawatan Gurun pasir dan Telaga biru",
+        "Tiket masuk Lagoi",
+        "Breakfast 2x, Lunch 2x, Dinner 2x",
+        "Tiket Lawatan Jembatan Barelang",
+        "Air Mineral 1 btl/day"
+      ],
+      excludes: []
+    }
+  };
+
+  // Logika Perhitungan Dinamis
+  const currentPricePerPax = packageOptions[selectedOption].price;
+  const currentMinPax = packageOptions[selectedOption].minPax;
+  const totalPrice = pax * currentPricePerPax;
+  
+  // Validasi Pengaman Pax
+  const isPaxValid = pax >= currentMinPax;
+
+  // Handler Otomatis Menyesuaikan Jumlah Pax
+  const handleOptionChange = (optionKey: OptionKey) => {
+    setSelectedOption(optionKey);
+    const targetMinPax = packageOptions[optionKey].minPax;
+    if (pax < targetMinPax) {
+      setPax(targetMinPax);
+    }
+  };
 
   interface ActivityItem {
     name: string;
@@ -24,6 +80,7 @@ export default function DetailPaketTour() {
     activities: (ActivityItem | string)[];
   }
 
+  // Mengambil Data Tour ID 2 (Paket 3D2N)
   const tourData = tourPackages.find((p: { id: number }) => p.id === 2) || tourPackages[0];
 
   if (!tourData) {
@@ -34,36 +91,31 @@ export default function DetailPaketTour() {
     );
   }
 
-  const getNumericPrice = (priceVal: string | number) => {
-    if (typeof priceVal === 'number') return priceVal;
-    if (!priceVal) return 0;
-    const extracted = String(priceVal).replace(/\D/g, ''); 
-    return extracted ? parseInt(extracted, 10) : 0;
-  };
+  // --- LOGIKA MENDAPATKAN LOKASI AWAL UNTUK PETA ---
+  let firstPlaceName = "Batam";
+  if (tourData?.itinerary?.[0]?.activities?.[0]) {
+    const firstAct = tourData.itinerary[0].activities[0];
+    firstPlaceName = typeof firstAct === 'string' ? firstAct : firstAct.name;
+  }
+  // Tempat yang aktif di peta saat ini
+  const activePlace = selectedPlace || firstPlaceName;
 
-  const currentPricePerPax = includeAddon ? basePrice + addonPrice : basePrice;
-  const totalPrice = pax * currentPricePerPax;
-  const isPaxValid = pax >= 5;
-
-  const numericPrice = getNumericPrice(tourData.price);
 
   const getImageUrl = (source: string, width: number, height: number, isKeyword = false) => {
-  if (!source) {
-    return `https://placehold.co/${width}x${height}/orange/white?text=No+Image`;
-  }
-
-  if (source.startsWith("http") || source.startsWith("/")) return source;
-
-  if (isKeyword) {
-    return `https://source.unsplash.com/featured/?${encodeURIComponent(source)}&w=${width}&h=${height}`;
-  }
-
-  return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
-};
+    if (!source) {
+      return `https://placehold.co/${width}x${height}/orange/white?text=No+Image`;
+    }
+    if (source.startsWith("http") || source.startsWith("/")) return source;
+    if (isKeyword) {
+      return `https://source.unsplash.com/featured/?${encodeURIComponent(source)}&w=${width}&h=${height}`;
+    }
+    return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
+      {/* HERO SECTION */}
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
@@ -74,25 +126,28 @@ export default function DetailPaketTour() {
         <div className="relative z-20 max-w-6xl mx-auto px-4 w-full">
           <div className="flex gap-2 mb-3">
             <span className="bg-orange-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
-              {tourData.duration || "Paket Tour"}
+              {tourData.duration || "3D2N"}
             </span>
             <span className="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-bold">
-              {tourData.location || "Batam"}
+              {tourData.location || "Batam & Bintan"}
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">
             {tourData.name}
           </h1>
           <p className="text-gray-300 text-lg flex items-center gap-2">
-            <MapPin size={18} className="text-orange-400" /> Jelajahi destinasi terbaik di {tourData.location || "Batam"}.
+            <MapPin size={18} className="text-orange-400" /> Eksplorasi destinasi terbaik Batam & Bintan.
           </p>
         </div>
       </section>
 
+      {/* KONTEN UTAMA */}
       <section className="max-w-6xl mx-auto px-4 -mt-12 relative z-30 flex flex-col lg:flex-row gap-8">
         
+        {/* KOLOM KIRI: Detail & Itinerary */}
         <div className="flex-1 space-y-8">
           
+          {/* BOX TENTANG PAKET */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Tentang Paket</h2>
             <p className="text-gray-600 leading-relaxed mb-8 text-sm md:text-base text-justify whitespace-pre-line">
@@ -114,109 +169,216 @@ export default function DetailPaketTour() {
             )}
           </div>
 
-          {tourData.includes && tourData.includes.length > 0 && (
-            <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <CheckCircle className="text-green-500" /> Fasilitas Termasuk
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {tourData.includes.map((item: string, index: number) => (
-                  <div key={index} className="flex items-start gap-3 group">
-                    <div className="mt-0.5 bg-green-50 p-1 rounded-full border border-green-100 group-hover:bg-green-500 transition-colors duration-300">
-                      <Check size={16} className="text-green-600 group-hover:text-white transition-colors duration-300" />
-                    </div>
-                    <span className="text-gray-700 text-sm md:text-base font-medium">{item}</span>
+          {/* ---> BOX DETAIL 2 PILIHAN PAKET <--- */}
+          <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <Info className="text-orange-500" /> Rincian Fasilitas Paket
+            </h2>
+            <p className="text-gray-500 text-sm mb-6">Pilih variasi paket yang paling sesuai dengan kebutuhan perjalanan Anda:</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {(Object.entries(packageOptions) as [OptionKey, typeof packageOptions[OptionKey]][]).map(([key, pkg]) => (
+                <div 
+                  key={key} 
+                  className={`p-6 rounded-2xl border-2 transition-all duration-300 flex flex-col h-full ${
+                    selectedOption === key ? 'border-orange-500 bg-orange-50/40 shadow-md' : 'border-gray-100 bg-gray-50'
+                  }`}
+                >
+                  <h3 className="font-bold text-gray-800 text-xl mb-1 leading-tight">{pkg.title}</h3>
+                  <div className="text-orange-600 font-black mb-1 text-2xl">
+                    RM {pkg.price} <span className="text-sm text-gray-400 font-medium">/ pax</span>
                   </div>
-                ))}
-              </div>
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-5 pb-4 border-b border-gray-200">
+                    Minimal {pkg.minPax} Peserta
+                  </div>
+                  
+                  <div className="flex-1">
+                    <ul className="space-y-3">
+                      {pkg.includes.map((feat, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700 leading-snug">
+                          <Check size={18} className="text-green-500 shrink-0 mt-0.5" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+          {/* ---> AKHIR BOX DETAIL <--- */}
 
+          {/* BOX ITINERARY DENGAN MAPS INTEGRASI */}
           {tourData.itinerary && tourData.itinerary.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <Clock className="text-orange-500" /> Rencana Perjalanan
+                <Clock className="text-orange-500" /> Rencana Perjalanan (Itinerary)
               </h2>
               
-              <div className="relative border-l-2 border-orange-200 ml-3 md:ml-4 space-y-12">
-                {tourData.itinerary.map((dayData: ItineraryDay, dayIndex: number) => (
-                  <div key={dayIndex} className="relative pl-6 md:pl-8">
-                    <div className="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-orange-500 border-4 border-white shadow-sm" />
-                    <h3 className="text-xl font-bold text-gray-800 mb-1">{dayData.day}</h3>
-                    <p className="text-sm text-gray-500 mb-6">{dayData.title || "Aktivitas Harian"}</p>
-                    
-                    <div className="flex flex-col">
-                      {dayData.activities?.map((item: ActivityItem | string, index: number) => {
-                        const isString = typeof item === 'string';
+              <div className="flex flex-col md:flex-row gap-8">
+                
+                {/* Bagian Kiri: Timeline Jadwal */}
+                <div className="w-full md:w-1/2 relative border-l-2 border-orange-200 ml-3 md:ml-4 space-y-12">
+                  {tourData.itinerary.map((dayData: ItineraryDay, dayIndex: number) => (
+                    <div key={dayIndex} className="relative pl-6 md:pl-8">
+                      <div className="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-orange-500 border-4 border-white shadow-sm" />
+                      <h3 className="text-xl font-bold text-gray-800 mb-1">{dayData.day}</h3>
+                      <p className="text-sm text-gray-500 mb-6">{dayData.title || "Aktivitas Harian"}</p>
+                      
+                      <div className="flex flex-col">
+                        {dayData.activities?.map((item: ActivityItem | string, index: number) => {
+                          const isString = typeof item === 'string';
+                          const objItem = item as ActivityItem; 
 
-                        const objItem = item as ActivityItem; 
+                          const placeName = isString ? item : objItem.name;
+                          const keyword = isString ? item : (objItem.keyword || objItem.name);
+                          const imageId = !isString && objItem.image ? objItem.image : null;
 
-                        const placeName = isString ? item : objItem.name;
-                        const keyword = isString ? item : (objItem.keyword || objItem.name);
-                        const imageId = !isString && objItem.image ? objItem.image : null;
+                          const imgSrc = imageId 
+                          ? getImageUrl(imageId, 400, 300) 
+                          : getImageUrl(keyword, 400, 300, true);
 
-                        const imgSrc = imageId 
-                        ? getImageUrl(imageId, 400, 300) 
-                        : getImageUrl(keyword, 400, 300, true);
+                          // Cek apakah item ini yang sedang aktif dipilih di Peta
+                          const isActive = activePlace === placeName;
 
-                        return (
-                          <div key={index} className="flex gap-4 group relative cursor-pointer">
-                            <div className="flex flex-col items-center">
-                              <span className="flex items-center justify-center min-w-[28px] h-[28px] rounded-full bg-orange-50 text-orange-600 text-xs font-bold border border-orange-200 z-10 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                                {index + 1}
+                          return (
+                            <div 
+                              key={index} 
+                              onClick={() => setSelectedPlace(placeName)}
+                              className={`flex gap-4 group relative cursor-pointer p-2 -ml-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-orange-50/50' : 'hover:bg-gray-50'}`}
+                            >
+                              <div className="flex flex-col items-center">
+                                {/* Lingkaran Angka Berubah Oranye Terang Jika Aktif */}
+                                <span className={`flex items-center justify-center min-w-[28px] h-[28px] rounded-full text-xs font-bold border z-10 transition-colors ${
+                                  isActive 
+                                    ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                                    : 'bg-white text-orange-600 border-orange-200 group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500'
+                                }`}>
+                                  {index + 1}
+                                </span>
+                                {index !== dayData.activities.length - 1 && (
+                                  <div className="w-[2px] h-full bg-gray-100 my-1 min-h-[16px]" />
+                                )}
+                              </div>
+
+                              {/* Nama Tempat Berubah Oranye Tebal Jika Aktif */}
+                              <span className={`text-sm md:text-base pt-1 pb-4 transition-colors ${
+                                isActive 
+                                  ? 'text-orange-600 font-bold' 
+                                  : 'text-gray-700 font-medium group-hover:text-orange-600'
+                              }`}>
+                                {placeName}
                               </span>
-                              {index !== dayData.activities.length - 1 && (
-                                <div className="w-[2px] h-full bg-gray-100 my-1 min-h-[16px]" />
-                              )}
-                            </div>
 
-                            <span className="text-gray-700 font-medium text-sm md:text-base pt-1 pb-4 group-hover:text-orange-600 transition-colors">
-                              {placeName}
-                            </span>
-
-                            <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                              <div className="absolute inset-0 bg-black/10 z-10" />
-                              <Image 
-                                src={imgSrc}
-                                alt={placeName}
-                                width={400}
-                                height={300}
-                                className="w-full h-full object-cover"
-                                unoptimized 
-                              />
-                              <div className="absolute bottom-0 left-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent z-20">
-                                <p className="text-white text-xs font-semibold truncate">{placeName}</p>
+                              {/* Efek Hover Gambar */}
+                              <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                <div className="absolute inset-0 bg-black/10 z-10" />
+                                <Image 
+                                  src={imgSrc}
+                                  alt={placeName}
+                                  width={400}
+                                  height={300}
+                                  className="w-full h-full object-cover"
+                                  unoptimized 
+                                />
+                                <div className="absolute bottom-0 left-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent z-20">
+                                  <p className="text-white text-xs font-semibold truncate">{placeName}</p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bagian Kanan: Peta Google Interaktif (Sticky) */}
+                <div className="w-full md:w-1/2">
+                  <div className="sticky top-28 h-[350px] md:h-[450px] w-full rounded-2xl overflow-hidden border-4 border-orange-100 shadow-md relative bg-gray-50 transition-all">
+                    {/* Maps Otomatis Mencari Titik Lokasi */}
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      className="absolute top-0 left-0 transition-opacity duration-500"
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(activePlace + " " + (tourData.location || "Batam Bintan"))}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                      allowFullScreen
+                    ></iframe>
+                    
+                    {/* Label Penanda Tempat yang sedang aktif di pojok Maps */}
+                    <div className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 pointer-events-none flex items-center gap-1.5">
+                      <MapPin size={14} className="text-orange-500" />
+                      <p className="text-xs font-bold text-gray-700">
+                        {activePlace}
+                      </p>
                     </div>
                   </div>
-                ))}
+                  <p className="text-xs text-center text-gray-400 mt-3 italic">
+                    *Klik destinasi pada jadwal di samping untuk melihat lokasinya di peta.
+                  </p>
+                </div>
+
               </div>
             </div>
           )}
         </div>
 
+        {/* KOLOM KANAN: Kalkulator Harga (2 Pilihan) */}
         <div className="w-full lg:w-[400px]">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 lg:sticky lg:top-24">
+            
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pesan Paket Tour</h3>
-            <p className="text-gray-500 text-sm mb-6">Hitung estimasi biaya perjalanan Anda.</p>
+            <p className="text-gray-500 text-sm mb-6">Pilih rute perjalanan dan hitung biaya Anda.</p>
 
-            <div className="bg-gray-50 p-4 rounded-2xl mb-4 border border-gray-200 flex items-center justify-between">
+            {/* SELEKSI 2 TIPE PAKET (Radio Bersih) */}
+            <div className="mb-6 space-y-3">
+              <h4 className="text-sm font-bold text-gray-700 mb-2">Pilihan Paket:</h4>
+              
+              {(Object.entries(packageOptions) as [OptionKey, typeof packageOptions[OptionKey]][]).map(([key, pkg]) => (
+                <div 
+                  key={key}
+                  onClick={() => handleOptionChange(key)}
+                  className={`flex items-center gap-3 p-4 border rounded-2xl cursor-pointer transition-all duration-200 ${
+                    selectedOption === key ? 'border-orange-500 bg-orange-50/50 shadow-sm' : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <div className={`w-5 h-5 shrink-0 rounded-full border-2 flex items-center justify-center ${selectedOption === key ? 'border-orange-600' : 'border-gray-300'}`}>
+                    {selectedOption === key && <div className="w-2.5 h-2.5 rounded-full bg-orange-600" />}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-gray-800 text-sm">{pkg.title}</span>
+                      <span className="text-sm font-black text-orange-600">RM {pkg.price}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 mt-0.5">{pkg.shortSub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* STEPPER JUMLAH PESERTA */}
+            <div className="bg-gray-50 p-4 rounded-2xl mb-6 border border-gray-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Users size={20} className="text-orange-500" />
-                <span className="font-semibold text-gray-700">Jumlah Peserta</span>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-gray-700 text-sm">Jumlah Peserta</span>
+                  <span className="text-[10px] text-gray-400 font-bold">Minimal {currentMinPax} Orang</span>
+                </div>
               </div>
               <div className="flex items-center gap-4 bg-white px-3 py-1.5 rounded-xl border border-gray-200 shadow-sm">
                 <button 
-                  onClick={() => setPax(Math.max(1, pax - 1))}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-orange-100 hover:text-orange-600 transition-colors"
+                  onClick={() => setPax(Math.max(currentMinPax, pax - 1))}
+                  disabled={pax <= currentMinPax}
+                  className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors duration-200 ${
+                    pax <= currentMinPax 
+                      ? 'bg-gray-100 text-gray-300 cursor-not-allowed' 
+                      : 'bg-gray-50 text-gray-600 hover:bg-orange-100 hover:text-orange-600'
+                  }`}
                 >
                   <Minus size={16} />
                 </button>
-                <span className="font-bold text-lg w-4 text-center text-gray-800">{pax}</span>
+                <span className="font-bold text-lg w-5 text-center text-gray-800">{pax}</span>
                 <button 
                   onClick={() => setPax(pax + 1)}
                   className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-orange-100 hover:text-orange-600 transition-colors"
@@ -226,37 +388,7 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
-            {!isPaxValid && (
-              <div className="mb-4 p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
-                ⚠️ Paket ini memerlukan minimal pesanan 5 peserta.
-              </div>
-            )}
-
-            <div className="mb-6">
-              <h4 className="text-sm font-bold text-gray-700 mb-2">Opsi Tambahan:</h4>
-              <label 
-                className={`flex items-center justify-between p-4 border rounded-2xl cursor-pointer transition-all duration-200 ${
-                  includeAddon 
-                    ? 'border-orange-500 bg-orange-50/50 shadow-sm' 
-                    : 'border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <input 
-                    type="checkbox" 
-                    checked={includeAddon}
-                    onChange={(e) => setIncludeAddon(e.target.checked)}
-                    className="w-5 h-5 accent-orange-600 rounded cursor-pointer"
-                  />
-                  <div className="flex flex-col">
-                    <span className="font-bold text-gray-700 text-sm">Bintan PP & Tiket Wisata</span>
-                    <span className="text-xs text-gray-400">Include tiket kapal PP & akses wisata</span>
-                  </div>
-                </div>
-                <span className="text-sm font-black text-orange-600">+RM {addonPrice}</span>
-              </label>
-            </div>
-
+            {/* DISPLAY TOTAL HARGA AKHIR */}
             <div className="flex justify-between items-end mb-6 pb-6 border-b border-gray-100">
               <span className="text-gray-500 font-medium">Total Harga</span>
               <div className="text-right">
@@ -265,22 +397,17 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
+            {/* TOMBOL WHATSAPP */}
             <a 
-              href={isPaxValid ? `https://wa.me/6281234567890?text=${encodeURIComponent(
-                `Halo, saya tertarik dengan paket tour *${tourData.name}*.\n\n` +
-                `• Jumlah Peserta: ${pax} Pax\n` +
-                `• Tambahan Bintan PP & Tiket Wisata: ${includeAddon ? '✅ Ya (+RM 100)' : '❌ Tidak'}\n` +
+              href={isPaxValid ? `https://wa.me/6282283225920?text=${encodeURIComponent(
+                `Halo Admin, saya tertarik dengan paket tour *${tourData.name}*.\n\n` +
+                `• Pilihan: *${packageOptions[selectedOption].title}*\n` +
+                `• Jumlah Peserta: ${pax} Pax (Minimal: ${currentMinPax} pax)\n` +
                 `• Harga per Pax: RM ${currentPricePerPax}\n\n` +
-                `*Total Estimasi Biaya: RM ${totalPrice}*\n\nApakah jadwal keberangkatan untuk paket ini masih tersedia?`
+                `*Total Estimasi Biaya: RM ${totalPrice}*\n\nApakah jadwal keberangkatan untuk rincian ini masih tersedia?`
               )}` : '#'}
               target={isPaxValid ? "_blank" : undefined}
               rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!isPaxValid) {
-                  e.preventDefault();
-                  alert("Maaf, jumlah peserta minimum untuk paket ini adalah 5 orang.");
-                }
-              }}
               className={`w-full text-white font-bold py-4 rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
                 isPaxValid 
                   ? 'bg-[#25D366] hover:bg-[#1DA851] hover:shadow-green-500/30 cursor-pointer' 
@@ -293,9 +420,6 @@ export default function DetailPaketTour() {
               Pesan via WhatsApp
             </a>
             
-            <p className="text-center text-xs text-gray-500 mt-4 px-2">
-              Pemesanan cepat dan mudah langsung melalui WhatsApp kami.
-            </p>
           </div>
         </div>
 

@@ -19,6 +19,10 @@ interface ItineraryDay {
 export default function DetailPaketTour() {
   const [pax, setPax] = useState(1);
   
+  // State untuk menyimpan tempat wisata yang sedang di-klik untuk Peta
+  const [selectedPlace, setSelectedPlace] = useState("");
+  
+  // Mengambil paket dengan ID 1 (2D1N)
   const tourData = tourPackages.find((p) => p.id === 1);
 
   if (!tourData) {
@@ -29,6 +33,18 @@ export default function DetailPaketTour() {
     );
   }
 
+  // --- LOGIKA PETA DINAMIS ---
+  // Jika belum ada yang diklik, gunakan tempat wisata pertama di hari pertama sebagai default
+  let firstPlaceName = "Batam";
+  if (tourData?.itinerary?.[0]?.activities?.[0]) {
+    const firstAct = tourData.itinerary[0].activities[0];
+    firstPlaceName = typeof firstAct === 'string' ? firstAct : firstAct.name;
+  }
+  // Tempat yang aktif di peta saat ini
+  const activePlace = selectedPlace || firstPlaceName;
+
+
+  // Helper untuk memastikan harga dibaca sebagai angka
   const getNumericPrice = (priceVal: string | number) => {
     if (typeof priceVal === 'number') return priceVal;
     if (!priceVal) return 0;
@@ -36,6 +52,7 @@ export default function DetailPaketTour() {
     return extracted ? parseInt(extracted, 10) : 0;
   };
   
+  // Kalkulasi Harga (Hanya Harga Dasar x Pax)
   const numericPrice = getNumericPrice(tourData.price);
   const totalPrice = pax * numericPrice;
 
@@ -46,13 +63,21 @@ export default function DetailPaketTour() {
     return `https://images.unsplash.com/photo-${source}?q=80&w=${width}&auto=format&fit=crop`;
   };
 
+  // Format Pesan WA Dinamis (Bersih tanpa Includes)
   const waNumber = "6282283225920";
-  const waMessage = encodeURIComponent(`Halo, saya ingin memesan paket tour:\n\n*${tourData.name}*\nJumlah Peserta: ${pax} Orang\nTotal Estimasi: RM ${totalPrice}\n\nMohon informasi ketersediaannya.`);
+  const waMessage = encodeURIComponent(
+    `Halo Admin, saya ingin memesan paket tour:\n\n` +
+    `*${tourData.name}*\n` +
+    `Jumlah Peserta: ${pax} Orang\n\n` +
+    `*Total Estimasi: RM ${totalPrice}*\n\n` +
+    `Mohon informasi ketersediaannya.`
+  );
   const waLink = `https://wa.me/${waNumber}?text=${waMessage}`;
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
       
+      {/* Header Banner */}
       <section className="relative w-full h-[50vh] flex flex-col justify-end pb-24 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
@@ -62,8 +87,12 @@ export default function DetailPaketTour() {
         
         <div className="relative z-20 max-w-6xl mx-auto px-4 w-full">
           <div className="flex gap-2 mb-3">
-            <span className="bg-orange-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">{tourData.duration || "2 Hari 1 Malam"}</span>
-            <span className="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-bold">{tourData.location || "Batam, Kepri"}</span>
+            <span className="bg-orange-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">
+              {tourData.duration || "2 Hari 1 Malam"}
+            </span>
+            <span className="bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-bold">
+              {tourData.location || "Batam, Kepri"}
+            </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">
             {tourData.name}
@@ -76,9 +105,10 @@ export default function DetailPaketTour() {
 
       <section className="max-w-6xl mx-auto px-4 -mt-12 relative z-30 flex flex-col lg:flex-row gap-8">
         
+        {/* Kolom Kiri: Detail Paket & Itinerary */}
         <div className="flex-1 space-y-8">
           
-          <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100 mb-8">
+          <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Tentang Paket</h2>
             <p className="text-gray-600 leading-relaxed mb-8 text-sm md:text-base text-justify">
               {tourData.description}
@@ -89,7 +119,7 @@ export default function DetailPaketTour() {
                 {tourData.highlights.map((dest: string, index: number) => (
                   <span 
                     key={index} 
-                    className="inline-flex items-center gap-1.5 bg-[#f4fbf9] text-teal-800 border border-teal-100/50 px-4 py-2 rounded-full text-sm font-medium hover:bg-teal-50 transition-colors cursor-default shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-[#f4fbf9] text-teal-800 border border-teal-100/50 px-4 py-2 rounded-full text-sm font-medium shadow-sm cursor-default"
                   >
                     <Star size={16} className="text-yellow-400" fill="currentColor" />
                     {dest}
@@ -99,75 +129,127 @@ export default function DetailPaketTour() {
             )}
           </div>
 
+          {/* ITINERARY & MAPS DENGAN LAYOUT DUA KOLOM */}
           {tourData.itinerary && tourData.itinerary.length > 0 && (
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <Clock className="text-orange-500" /> Rencana Perjalanan (Itinerary)
               </h2>
               
-              <div className="relative border-l-2 border-orange-200 ml-3 md:ml-4 space-y-12">
-                {tourData.itinerary.map((dayData: ItineraryDay, dayIndex: number) => (
-                  <div key={dayIndex} className="relative pl-6 md:pl-8">
-                    <div className="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-orange-500 border-4 border-white shadow-sm" />
-                    <h3 className="text-xl font-bold text-gray-800 mb-1">{dayData.day}</h3>
-                    <p className="text-sm text-gray-500 mb-6">{dayData.title || "Aktivitas Harian"}</p>
-                    
-                    <div className="flex flex-col">
-                      {dayData.activities?.map((rawItem, index) => {
-                        const isString = typeof rawItem === 'string';
-                        const item = isString ? { name: rawItem } as ActivityItem : rawItem as ActivityItem;
-                        const keyword = isString ? rawItem : (item.keyword || item.name);
-                        const imgSrc = item.image 
-                          ? getImageUrl(item.image, 400, 300) 
-                          : getImageUrl(keyword, 400, 300, true);
+              <div className="flex flex-col md:flex-row gap-8">
+                
+                {/* Bagian Kiri Itinerary: Timeline Jadwal */}
+                <div className="w-full md:w-1/2 relative border-l-2 border-orange-200 ml-3 md:ml-4 space-y-12">
+                  {tourData.itinerary.map((dayData: ItineraryDay, dayIndex: number) => (
+                    <div key={dayIndex} className="relative pl-6 md:pl-8">
+                      <div className="absolute -left-[11px] top-1 w-5 h-5 rounded-full bg-orange-500 border-4 border-white shadow-sm" />
+                      <h3 className="text-xl font-bold text-gray-800 mb-1">{dayData.day}</h3>
+                      <p className="text-sm text-gray-500 mb-6">{dayData.title || "Aktivitas Harian"}</p>
+                      
+                      <div className="flex flex-col">
+                        {dayData.activities?.map((rawItem, index) => {
+                          const isString = typeof rawItem === 'string';
+                          const item = isString ? { name: rawItem } as ActivityItem : rawItem as ActivityItem;
+                          const keyword = isString ? rawItem : (item.keyword || item.name);
+                          const imgSrc = item.image 
+                            ? getImageUrl(item.image, 400, 300) 
+                            : getImageUrl(keyword, 400, 300, true);
 
-                        return (
-                          <div key={index} className="flex gap-4 group relative cursor-pointer">
-                            <div className="flex flex-col items-center">
-                              <span className="flex items-center justify-center min-w-[28px] h-[28px] rounded-full bg-orange-50 text-orange-600 text-xs font-bold border border-orange-200 z-10 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                                {index + 1}
+                          // Cek apakah item ini yang sedang aktif dipilih di Peta
+                          const isActive = activePlace === item.name;
+
+                          return (
+                            <div 
+                              key={index} 
+                              onClick={() => setSelectedPlace(item.name)}
+                              className={`flex gap-4 group relative cursor-pointer p-2 -ml-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-orange-50/50' : 'hover:bg-gray-50'}`}
+                            >
+                              <div className="flex flex-col items-center">
+                                {/* Angka Step (Berubah warna jika aktif) */}
+                                <span className={`flex items-center justify-center min-w-[28px] h-[28px] rounded-full text-xs font-bold border z-10 transition-colors ${
+                                  isActive 
+                                    ? 'bg-orange-500 text-white border-orange-500 shadow-md' 
+                                    : 'bg-white text-orange-600 border-orange-200 group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500'
+                                }`}>
+                                  {index + 1}
+                                </span>
+                                {index !== dayData.activities.length - 1 && (
+                                  <div className="w-[2px] h-full bg-gray-100 my-1 min-h-[16px]" />
+                                )}
+                              </div>
+
+                              {/* Nama Tempat (Berubah warna jika aktif) */}
+                              <span className={`text-sm md:text-base pt-1 pb-4 transition-colors ${
+                                isActive 
+                                  ? 'text-orange-600 font-bold' 
+                                  : 'text-gray-700 font-medium group-hover:text-orange-600'
+                              }`}>
+                                {item.name}
                               </span>
-                              {index !== dayData.activities.length - 1 && (
-                                <div className="w-[2px] h-full bg-gray-100 my-1 min-h-[16px]" />
-                              )}
-                            </div>
 
-                            <span className="text-gray-700 font-medium text-sm md:text-base pt-1 pb-4 group-hover:text-orange-600 transition-colors">
-                              {item.name}
-                            </span>
-
-                            <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                              <div className="absolute inset-0 bg-black/10 z-10" />
-                              <Image 
-                                src={imgSrc} 
-                                alt={item.name} 
-                                width={400} 
-                                height={300} 
-                                className="w-full h-full object-cover"
-                                unoptimized
-                              />
-                              <div className="absolute bottom-0 left-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent z-20">
-                                <p className="text-white text-xs font-semibold truncate">
-                                  {item.name}
-                                </p>
+                              {/* Tooltip Image Hover (Tetap dipertahankan) */}
+                              <div className="absolute left-12 bottom-full mb-1 z-50 w-48 h-32 md:w-56 md:h-36 rounded-xl overflow-hidden shadow-2xl border-4 border-white pointer-events-none invisible opacity-0 translate-y-4 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                <div className="absolute inset-0 bg-black/10 z-10" />
+                                <Image 
+                                  src={imgSrc} 
+                                  alt={item.name} 
+                                  width={400} 
+                                  height={300} 
+                                  className="w-full h-full object-cover"
+                                  unoptimized
+                                />
+                                <div className="absolute bottom-0 left-0 w-full p-2 bg-gradient-to-t from-black/80 to-transparent z-20">
+                                  <p className="text-white text-xs font-semibold truncate">
+                                    {item.name}
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bagian Kanan Itinerary: Peta Google Interaktif */}
+                <div className="w-full md:w-1/2">
+                  <div className="sticky top-28 h-[350px] md:h-[450px] w-full rounded-2xl overflow-hidden border-4 border-orange-100 shadow-md relative bg-gray-50 transition-all">
+                    {/* Trik memuat Google Maps berdasarkan state activePlace */}
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      className="absolute top-0 left-0 transition-opacity duration-500"
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(activePlace + " " + (tourData.location || "Batam"))}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                      allowFullScreen
+                    ></iframe>
+                    
+                    {/* Label Peta di pojok atas */}
+                    <div className="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-gray-100 pointer-events-none">
+                      <p className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                        <MapPin size={14} className="text-orange-500" />
+                        {activePlace}
+                      </p>
                     </div>
                   </div>
-                ))}
+                  <p className="text-xs text-center text-gray-400 mt-3 italic">
+                    *Klik destinasi pada jadwal di samping untuk melihat lokasinya di peta.
+                  </p>
+                </div>
+
               </div>
             </div>
           )}
         </div>
 
+        {/* Kolom Kanan: Sidebar Pemesanan (Tanpa Includes) */}
         <div className="w-full lg:w-[400px]">
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-100 lg:sticky lg:top-24" suppressHydrationWarning>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pesan Paket Tour</h3>
             <p className="text-gray-500 text-sm mb-6">Hitung estimasi biaya perjalanan Anda.</p>
 
+            {/* Jumlah Peserta */}
             <div className="bg-gray-50 p-4 rounded-2xl mb-6 border border-gray-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Users size={20} className="text-orange-500" />
@@ -190,14 +272,16 @@ export default function DetailPaketTour() {
               </div>
             </div>
 
+            {/* Total Harga Dasar */}
             <div className="flex justify-between items-end mb-6 pb-6 border-b border-gray-100">
               <span className="text-gray-500 font-medium">Total Harga</span>
               <div className="text-right">
                 <div className="text-3xl font-black text-orange-600">RM {totalPrice}</div>
-                <div className="text-xs text-gray-400 mt-1">Estimasi RM {numericPrice} / pax</div>
+                <div className="text-xs text-gray-400 mt-1">RM {numericPrice} / pax</div>
               </div>
             </div>
 
+            {/* Tombol WhatsApp */}
             <a 
               href={waLink}
               target="_blank"
