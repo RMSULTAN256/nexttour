@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Poppins, Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/navbar";
+import Footer from "@/app/components/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,17 +42,9 @@ export default function RootLayout({
         <Navbar />
         <main>
         {children}
+        <SpeedInsights />
         </main>
-        <footer className="w-full bg-blue-700 text-white py-8 mt-auto">
-          {/* Inner container opsional agar teks footer sejajar dengan konten atas */}
-          <div className="max-w-6xl mx-auto px-4 text-center md:text-left flex flex-col md:flex-row justify-between">
-            <p>&copy; 2026 HappyTourRentCar.</p>
-            <div className="space-x-4 mt-4 md:mt-0">
-              <a href="#" className="hover:underline">Kebijakan Privasi</a>
-              <a href="#" className="hover:underline">Kontak</a>
-            </div>
-          </div>
-        </footer>
+          <Footer />
         </body>
     </html>
   );

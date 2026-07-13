@@ -32,7 +32,7 @@ export default function Navbar() {
     { name: "Beranda", href: "/" },
     { name: "Rental Mobil", href: "/rental-mobil" },
     { name: "Paket Tour", href: "/paket-tour" },
-    { name: "Hubungi", href: "/hubungi" },
+    { name: "Hubungi", href: "/kontak" },
   ];
 
   const useDarkText = isScrolled || !isBlurPage || isOpen;
@@ -55,7 +55,7 @@ export default function Navbar() {
             useDarkText ? "text-gray-800" : "text-white"
           }`}
         >
-          TourTravelKu
+          HappyTourRentCar
         </Link>
 
         <div className="hidden md:flex gap-2 font-inter">
