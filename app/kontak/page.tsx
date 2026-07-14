@@ -49,7 +49,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Alamat Kantor</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  Jl. Engku Putri, Batam Centre, <br />
+                  Taman Lestari Blok D14 No 22, Batu Aji, <br />
                   Kota Batam, Kepulauan Riau 29461 <br />
                   Indonesia
                 </p>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                   <span className="font-semibold">WhatsApp:</span> +62 822-8322-5920
                 </p>
                 <p className="text-gray-600 text-sm">
-                  <span className="font-semibold">Telepon:</span> +62 822-8322-5920
+                  <span className="font-semibold">Telepon:</span> +62 822-8471-514
                 </p>
               </div>
             </div>
@@ -80,13 +80,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Jam Operasional</h3>
                 <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-semibold text-gray-700">Senin - Jumat:</span> 08:00 - 17:00 WIB
-                </p>
-                <p className="text-gray-600 text-sm mb-1">
-                  <span className="font-semibold text-gray-700">Sabtu:</span> 08:00 - 14:00 WIB
-                </p>
-                <p className="text-red-500 text-sm font-semibold mt-2">
-                  Minggu & Hari Libur Nasional Tutup
+                  <span className="font-semibold text-gray-700">Senin - Minggu:</span> 24 JAM
                 </p>
               </div>
             </div>
