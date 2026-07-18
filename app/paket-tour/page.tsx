@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Search, MapPin, Clock } from "lucide-react";
 import tourPackages from "../../data/paket.json";
@@ -11,6 +12,20 @@ export default function PaketTour() {
     tour.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     tour.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const totalFoto = 24;
+  const galeriFoto = Array.from({ length: totalFoto }, (_, index) => ({
+    id: index + 1,
+    src: `/galeri/${index + 1}.jpeg`, 
+    alt: `Momen Tour Spesial ${index + 1}`,
+  }));
+
+  const galeriVideo = [
+  { id: 1, src: "/galeri/v1.mp4", label: "CUPLIKAN TOUR 1" },
+  // Kalau ada video kedua, tinggal hilangkan tanda komentar (//) di bawah ini:
+  // { id: 2, src: "/galeri/video-tour2.mp4", label: "CUPLIKAN BINTAN" },
+  // { id: 3, src: "/galeri/video-tour3.mp4", label: "CUPLIKAN BATAM" },
+];
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20 font-sans">
@@ -90,6 +105,58 @@ export default function PaketTour() {
           ))}
         </div>
       </section>
+      <section className="py-12 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4">
+      
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">Momen Keseruan Tour</h2>
+          <p className="text-gray-600">Intip pengalaman tak terlupakan bersama kami!</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          
+          {galeriFoto.map((foto) => (
+            <div 
+              key={`foto-${foto.id}`} 
+              className="relative w-full h-64 rounded-xl overflow-hidden shadow-sm group"
+            >
+              <Image
+                src={foto.src}
+                alt={foto.alt}
+                fill 
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <span className="text-white font-medium">{foto.alt}</span>
+              </div>
+            </div>
+          ))}
+
+          {galeriVideo.map((video) => (
+            <div 
+              key={`video-${video.id}`} 
+              className="relative w-full h-64 rounded-xl overflow-hidden shadow-sm group"
+            >
+               <video 
+                  src={video.src}
+                  controls
+                  preload="metadata"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+               />
+               
+               <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/60 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <span className="text-white font-bold text-sm tracking-wider shadow-sm">
+                    🎥 {video.label}
+                  </span>
+               </div>
+            </div>
+          ))}
+
+        </div>
+
+      </div>
+    </section>
     </div>
   );
 }
