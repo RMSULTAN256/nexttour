@@ -13,7 +13,7 @@ export default function IPTracker() {
         const ipRes = await fetch("https://api.ipify.org?format=json");
         const ipData: IpifyResponse = await ipRes.json();
 
-        await fetch("/api/track-ip", {
+        await fetch("/api/track", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
