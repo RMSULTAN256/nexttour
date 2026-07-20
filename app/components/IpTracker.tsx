@@ -28,7 +28,5 @@ export default function IPTracker() {
     trackVisitor();
   }, []);
 
-  // Di React dengan TypeScript, komponen yang tidak merender elemen visual
-  // harus mengembalikan tipe `null`.
   return null; 
 }

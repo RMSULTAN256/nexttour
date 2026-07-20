@@ -32,10 +32,13 @@ export async function POST(req: NextRequest) {
 
     try {
       const n8nWebhookUrl = "https://linling.app.n8n.cloud/webhook/analyst";
-      
+      console.log('Try sending result to n8n');
       await fetch(n8nWebhookUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.N8N_AUTH_TOKEN}`
+        },
         body: JSON.stringify({ 
           ip: ip,
           timestamp: new Date().toISOString(),
