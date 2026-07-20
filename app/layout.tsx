@@ -4,6 +4,7 @@ import { Poppins, Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/navbar";
 import Footer from "@/app/components/Footer";
+import IPTracker from "@/app/components/IpTracker";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({
       className={`${poppins.variable} ${inter.variable} ${monterrat.variable} antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">
+        <IPTracker />
         <Navbar />
         <main>
         {children}
